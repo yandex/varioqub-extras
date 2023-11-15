@@ -1,0 +1,45 @@
+.question {
+    text-align: center;
+}
+
+.img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.choice-container {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    width: 40%;
+}
+
+.choice {
+    border: none;
+    flex: 1 1 0;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 32px;
+    border-radius: 2px;
+    transition-duration: 0.3s;
+}
+
+.choice:hover {
+    color: white;
+}
+
+.choice:active {
+    transform: scale(0.95);
+}
+
+.good {
+    background-color: #4CAF50;
+}
+
+.bad {
+    background-color: #de1010;
+}

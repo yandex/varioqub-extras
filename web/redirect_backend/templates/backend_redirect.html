@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>varioqub usage example</title>
+
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/style.css') }}">
+
+        <!-- RUS: Эти строчки можно найти на странице счетчика на https://metrika.yandex.ru.
+             Они запускают сессию для пользователя, отслеживают его действия. Должно присутствовать на всех страницах
+             ENG: These lines of code are copied from counter page at https://metrika.yandex.ru.
+             They are responsible for initializing counter session to track user's actions. It is recommended to insert on all pages -->
+
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+            ym(<YOUR_COUNTER_ID>, "init", {
+                clickmap:true,
+                trackLinks:true,
+                accurateTrackBounce:true
+            });
+
+            // !!!!!!!!!!!!!! Также нужно отправить данные об эксперименте метрике !!!!!!!!!!!!!!!!!
+            ym(<YOUR_COUNTER_ID>, "experiments", "{{ experiments }}");
+        </script>
+        <!-- /Yandex.Metrika counter -->
+
+        <!-- Заметим, что в отличии от других способов подключения, здесь не нужно использовать строки из счетчика эксперимента,
+             так как обработка флагов происходит на стороне сервера.
+             Также не нужно думать о мерцании страницы, так как сразу отправляется нужный вариант -->
+        <!-- Varioqub experiments /Varioqub experiments -->
+
+        <noscript><div>Enable javaScript support in your browser for this page to work</div></noscript>
+    </head>
+
+    <body>
+        <header>
+            <h1 class="question">Am I a good boy?</h1>
+        </header>
+
+        <section>
+
+            <!-- На эту страницу произошел редирект -->
+            <img class="img" src="{{ url_for('static', filename='src/red_corgi.png') }}"/>
+
+             <!-- RUS: Метрика будет считать взаимодействие с кнопкой (так как это перезагружает страницу) в зависимости от картинки (группы эксперимента)
+                 ENG: Metrika will track interactions with button (because it reloads page) depending on image (experiment group) -->
+            <div class="choice-container">
+                <button type="submit" class="choice good">Yes, of course!</button>
+            </div>
+        </section>
+    </body>
+</html>

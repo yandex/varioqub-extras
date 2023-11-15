@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>varioqub advertisement usage example</title>
+
+        <!-- RUS: Установим загрузчик рекламы
+             ENG: Installing advertisement loader -->
+        <script>window.yaContextCb=window.yaContextCb||[]</script>
+        <script src="https://yandex.ru/ads/system/context.js" async=""></script>
+
+
+        <!-- RUS: Эти строчки можно найти на странице счетчика на https://metrika.yandex.ru.
+             Они запускают сессию для пользователя, отслеживают его действия. Должно присутствовать на всех страницах
+             ENG: These lines of code are copied from counter page at https://metrika.yandex.ru.
+             They are responsible for initializing counter session to track user's actions. It is recommended to insert them on all pages -->
+
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+            ym(<YOUR_COUNTER_ID>, "init", {
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+            });
+        </script>
+        <!-- /Yandex.Metrika counter -->
+
+
+        <!-- RUS: Так как ответ от сервиса экспериментов приходит уже после того как страница загрузилась, то возникает мерцание.
+             Для борьбы с этим существует специальный элемент. Они должны присутствовать на всех страницах с экспериментом
+             ENG: The page will be loaded before the response from the server is received, which will change it, hence it will flicker.
+             To counteract this, you may insert these lines, that prevent page from initial rendering. It is recommended to insert them on all pages with experiments -->
+        <!-- Varioqub antiflicker -->
+        <style>.varioqub-antiflicker {opacity: 0 !important;}</style>
+        <script>
+            (function(a,n,t,i,f,li,c,k,e,r){
+                a[t]=a[t]||function(){(a[t].a=a[t].a||[]).push(arguments)};n.classList.add(i);c=function(){n.classList.remove(i)};li.callback=c;a[t].antiFlicker=li;setTimeout(c,f);
+            })(window, document.documentElement, 'ymab', 'varioqub-antiflicker', 500, { 'metrika.<YOUR_COUNTER_ID>': true });
+        </script>
+        <!-- /Varioqub antiflicker -->
+
+
+        <!-- RUS: Эти строчки нужно скопировать со страницы эксперимента, они отвечают за автоматическое изменение страницы для пользователя.
+             В данном случае применяют изменение, сделанные в редакторе.
+             ENG: These lines of code are copied from experiments page, they are responsible for initializing experiment and altering the experiment page.
+             In this case, changes from visual editor is applied here --> 
+        <!-- Varioqub experiments -->
+        <script type="text/javascript">
+            (function(e, x, pe, r, i, me, nt){
+                e[i]=e[i]||function(){(e[i].a=e[i].a||[]).push(arguments)},
+                me=x.createElement(pe),me.async=1,me.src=r,nt=x.getElementsByTagName(pe)[0],nt.parentNode.insertBefore(me,nt)
+            })
+            (window, document, 'script', 'https://abt.s3.yandex.net/expjs/latest/exp.js', 'ymab');
+
+            // RUS: Инициализация не требуется, так как получение флагов ее выполняет по умолчанию
+            // ENG: Initializing isn't necessary, because fetching flags with ymab does it automatically
+            // ymab('metrika.<YOUR_COUNTER_ID>', 'init'/*, {clientFeatures}, {callback}*/);
+        </script>
+        <!-- /Varioqub experiments -->
+
+        <!-- RUS: Код для отображения блоков с рекламой
+             ENG: Script to display various ad blocks -->
+        <script>
+            function displayBlockA() { 
+                window.yaContextCb.push(() => { 
+                    Ya.Context.AdvManager.render({
+                        // RUS: div, определенный выше
+                        // ENG: div defined above
+                        renderTo: 'block_A',
+
+                        // RUS: название блока у рекламе
+                        // ENG: block name
+                        blockId: 'R-A-111111-1'
+                    }) 
+                }) 
+            }
+
+            function displayBlockB() { 
+                window.yaContextCb.push(() => { 
+                    Ya.Context.AdvManager.render({
+                        // RUS: div, определенный выше
+                        // ENG: div defined above
+                        renderTo: 'block_B',
+
+                        // RUS: название блока у рекламе
+                        // ENG: block name
+                        blockId: 'R-A-111111-2'
+                    }) 
+                }) 
+            }
+
+            function displayDefault() { 
+                console.log("No experiments are live for this page!")
+            }
+        </script>
+
+
+        <!-- RUS: Получаем флаги и выставляем нужный рекламный блок
+             ENG: Fetch flags and set correct ad block -->
+        <script>
+            ymab(
+                // RUS: Здесь ваш счетчик
+                // ENG: Your counter name
+                'metrika.<YOUR_COUNTER_ID>',
+
+                // RUS Метод для получения флагов на данного пользователя
+                // ENG: Method to receive flags
+                'getFlags',
+
+                // RUS: Функция, которая вызовется после получения флагов
+                // ENG: Callback function to handle received flags
+                function (flags) {
+                    let isSet = false;
+                    for (const [key, values] of Object.entries(flags)) {
+                        // RUS: Так как у нас лишь один флаг, то сразу обработает его
+                        // ENG: Only one experiment is running, so we handle it inplace
+                        if (key === "block") {
+                
+                            // RUS: Отображаем нужный блок в зависимости от значения флага
+                            // ENG: Display particular block for each flag value
+                            switch (values) {
+                                case "A": {
+                                    isSet = true;
+                                    displayBlockA();
+                                    break;
+                                }
+
+                                case "B": {
+                                    isSet = true;
+                                    displayBlockB();
+                                    break;
+                                }
+
+                                default: {
+                                    isSet = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // RUS: Всегда нужно устанавливать отображение по умолчанию, так как эксперимент может быть не запущен
+                    // ENG: Ensure default variant exists in case of experiment being inactive
+                    if (!isSet) {
+                        displayDefault();
+                    }
+                }
+            );
+        </script>
+
+        <noscript><div>Enable javaScript support in your browser for this page to work</div></noscript>
+    </head>
+
+    <body>
+        <section>
+
+            <!-- RUS: Первый вариант блока с рекламой
+                 ENG: First ad block option -->
+            <!-- Yandex.RTB R-A-111111-1 -->
+            <div id='block_A'></div>
+
+            <!-- RUS: Второй вариант блока с рекламой
+                 ENG: Second ad block option -->           
+            <div id='block_B'></div>
+
+            <!-- RUS: Текст для подбора контекстной рекламы
+                 ENG: Text for contextual advertising -->
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </section>
+    </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>varioqub usage example</title>
+
+        <link rel= "stylesheet" type= "text/css" href="static/styles/style.css">
+
+
+        <!-- RUS: Эти строчки можно найти на странице счетчика на https://metrika.yandex.ru.
+             Они запускают сессию для пользователя, отслеживают его действия. Должно присутствовать на всех страницах
+             ENG: These lines of code are copied from counter page at https://metrika.yandex.ru.
+             They are responsible for initializing counter session to track user's actions. It is recommended to insert them on all pages -->
+
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+            ym(<YOUR_COUNTER_ID>, "init", {
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+            });
+        </script>
+        <!-- /Yandex.Metrika counter -->
+
+
+        <!-- RUS: Так как ответ от сервиса экспериментов приходит уже после того как страница загрузилась, то возникает мерцание.
+             Для борьбы с этим существует специальный элемент. Они должны присутствовать на всех страницах с экспериментом
+             ENG: The page will be loaded before the response from the server is received, which will change it, hence it will flicker.
+             To counteract this, you may insert these lines, that prevent page from initial rendering. It is recommended to insert them on all pages with experiments -->
+        <!-- Varioqub antiflicker -->
+        <style>.varioqub-antiflicker {opacity: 0 !important;}</style>
+        <script>
+            (function(a,n,t,i,f,li,c,k,e,r){
+                a[t]=a[t]||function(){(a[t].a=a[t].a||[]).push(arguments)};n.classList.add(i);c=function(){n.classList.remove(i)};li.callback=c;a[t].antiFlicker=li;setTimeout(c,f);
+            })(window, document.documentElement, 'ymab', 'varioqub-antiflicker', 500, { 'metrika.<YOUR_COUNTER_ID>': true });
+        </script>
+        <!-- /Varioqub antiflicker -->
+
+
+        <!-- RUS: Эти строчки нужно скопировать со страницы эксперимента, они отвечают за автоматическое изменение страницы для пользователя.
+             В данном случае применяют изменение, сделанные в редакторе.
+             ENG: These lines of code are copied from experiments page, they are responsible for initializing experiment and altering the experiment page.
+             In this case, changes from visual editor is applied here --> 
+        <!-- Varioqub experiments -->
+        <script type="text/javascript">
+            (function(e, x, pe, r, i, me, nt){
+                e[i]=e[i]||function(){(e[i].a=e[i].a||[]).push(arguments)},
+                me=x.createElement(pe),me.async=1,me.src=r,nt=x.getElementsByTagName(pe)[0],nt.parentNode.insertBefore(me,nt)
+            })
+            (window, document, 'script', 'https://abt.s3.yandex.net/expjs/latest/exp.js', 'ymab');
+
+            /// RUS: Настройка возможностей ymab для изменения страницы
+            /// ENG: Settings for automatic page modification via ymab
+            ymab('metrika.<YOUR_COUNTER_ID>', 'setConfig', {
+                // RUS: Обеспечивает возможность экспериментов с помощью визуального редактора (по умолчанию true)
+                // ENG: Enables visual editor changes for the page (true by default)
+                enableVisual: true,
+
+                // RUS: Обеспечивает возможность исполнять js в эксперименте с помощью визуального редактора (по умолчанию false)
+                // ENG: Enables js scripts from visual editor to be executed (false by default)
+                enableJS: true,
+
+                // RUS: Обеспечивает возможность менять HTML страницы в эксперименте с помощью визуального редактора (по умолчанию true)
+                // ENG: Enables HTML changes from visual editor (true by default)
+                enableHTML: true,
+
+                // RUS: Обеспечивает слежение за страницей, если что-то изменит целевой элемент, то оно вернется обратно (по умолчанию false)
+                // ENG: Enables watcher to counteract any changes done to the target elements of the experiment (false by default)
+                enableWatch: true,
+
+                // RUS: При использовании CSP позволяет изменять страницу (по умолчанию undefined)
+                // ENG: should be set for services, which use CSP (undefined by default) 
+                nonce: 'some_nonce'
+            });
+
+            // RUS: Запуск эксперимента и применение изменений из редактора
+            // ENG: experiment initializing and applying changes
+            ymab('metrika.<YOUR_COUNTER_ID>', 'init'/*, {clientFeatures}, {callback}*/);
+        </script>
+        <!-- /Varioqub experiments -->
+
+        <noscript><div>Enable javaScript support in your browser for this page to work</div></noscript>
+    </head>
+
+    <body>
+        <header>
+            <h1 class="question">Am I a good boy?</h1>
+        </header>
+
+        <section>
+
+            <img class="img" src="static/src/black_corgi.png"/>
+
+            <!-- RUS: Метрика будет считать взаимодействие с кнопкой (так как это перезагружает страницу) в зависимости от картинки (группы эксперимента)
+                 ENG: Metrika will track interactions with button (because it reloads page) depending on image (experiment group) -->
+            <div class="choice-container">
+                <button type="submit" class="choice good">Yes, of course!</button>
+            </div>
+        </section>
+    </body>
+</html>
