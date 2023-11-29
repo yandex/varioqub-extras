@@ -49,7 +49,7 @@
              Если делать запрос напрямую (аналогично запросу через backend), то можно удалить код ниже, однако такой способ не рекомендуется
              ENG: These lines of code are copied from experiments page, they are responsible for initializing experiment and altering the experiment page.
              In this case, giving access to ymab method, which can be used to receive flags for the user.
-             Take note, that it is not necessary to add these lines if you receive flags directly from uaas.yandex.ru (like backend example) --> 
+             Take note, that it is not necessary to add these lines if you receive flags directly from uaas.yandex.ru (like backend example) -->
         <!-- Varioqub experiments -->
         <script type="text/javascript">
             (function(e, x, pe, r, i, me, nt){
@@ -88,19 +88,15 @@
 
                 // RUS: Функция, которая вызовется после получения флагов
                 // ENG: Callback function to handle received flags
-                function (flags) {          
-                    for (const [key, values] of Object.entries(flags)) {
-                        // RUS: Так как у нас лишь один флаг, то сразу обработает его
-                        // ENG: Only one experiment is running, so we handle it inplace
-                        if (key === "corgi_image") {
-                
-                            if ("red_corgi" === values[values.length - 1]) { // last value is from latest experiment
-                                // RUS: Меняем изображение, если получили значение флага из эксперимента
-                                // ENG: Change an image, if value from experiment settings is received
-                                document.getElementById(imageID).src = "static/src/red_corgi.png";
-                            }
-                
-                            console.log(key, values);
+                function (flags) {
+                    // RUS: Так как у нас лишь один флаг, то сразу обработает его
+                    // ENG: Only one experiment is running, so we handle it inplace
+                    const values = flags.corgi_image;
+                    if (values) {
+                        if ("red_corgi" === values[values.length - 1]) { // last value is from latest experiment
+                            // RUS: Меняем изображение, если получили значение флага из эксперимента
+                            // ENG: Change an image, if value from experiment settings is received
+                            document.getElementById(imageID).src = "static/src/red_corgi.png";
                         }
                     }
                 }
