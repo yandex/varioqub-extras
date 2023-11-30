@@ -50,7 +50,7 @@
         <!-- RUS: Эти строчки нужно скопировать со страницы эксперимента, они отвечают за автоматическое изменение страницы для пользователя.
              В данном случае применяют изменение, сделанные в редакторе.
              ENG: These lines of code are copied from experiments page, they are responsible for initializing experiment and altering the experiment page.
-             In this case, changes from visual editor is applied here --> 
+             In this case, changes from visual editor is applied here -->
         <!-- Varioqub experiments -->
         <script type="text/javascript">
             (function(e, x, pe, r, i, me, nt){
@@ -68,8 +68,8 @@
         <!-- RUS: Код для отображения блоков с рекламой
              ENG: Script to display various ad blocks -->
         <script>
-            function displayBlockA() { 
-                window.yaContextCb.push(() => { 
+            function displayBlockA() {
+                window.yaContextCb.push(() => {
                     Ya.Context.AdvManager.render({
                         // RUS: div, определенный выше
                         // ENG: div defined above
@@ -78,12 +78,12 @@
                         // RUS: название блока у рекламе
                         // ENG: block name
                         blockId: 'R-A-111111-1'
-                    }) 
-                }) 
+                    })
+                })
             }
 
-            function displayBlockB() { 
-                window.yaContextCb.push(() => { 
+            function displayBlockB() {
+                window.yaContextCb.push(() => {
                     Ya.Context.AdvManager.render({
                         // RUS: div, определенный выше
                         // ENG: div defined above
@@ -92,11 +92,11 @@
                         // RUS: название блока у рекламе
                         // ENG: block name
                         blockId: 'R-A-111111-2'
-                    }) 
-                }) 
+                    })
+                })
             }
 
-            function displayDefault() { 
+            function displayDefault() {
                 console.log("No experiments are live for this page!")
             }
         </script>
@@ -118,30 +118,29 @@
                 // ENG: Callback function to handle received flags
                 function (flags) {
                     let isSet = false;
-                    for (const [key, values] of Object.entries(flags)) {
-                        // RUS: Так как у нас лишь один флаг, то сразу обработает его
-                        // ENG: Only one experiment is running, so we handle it inplace
-                        if (key === "block") {
-                
-                            // RUS: Отображаем нужный блок в зависимости от значения флага
-                            // ENG: Display particular block for each flag value
-                            switch (values) {
-                                case "A": {
-                                    isSet = true;
-                                    displayBlockA();
-                                    break;
-                                }
+                    // RUS: Так как у нас лишь один флаг, то сразу обработает его
+                    // ENG: Only one experiment is running, so we handle it inplace
+                    const values = flags.block;
+                    if (values) {
+                        const value = values[values.length - 1];
+                        // RUS: Отображаем нужный блок в зависимости от значения флага
+                        // ENG: Display particular block for each flag value
+                        switch (value) {
+                            case "A": {
+                                isSet = true;
+                                displayBlockA();
+                                break;
+                            }
 
-                                case "B": {
-                                    isSet = true;
-                                    displayBlockB();
-                                    break;
-                                }
+                            case "B": {
+                                isSet = true;
+                                displayBlockB();
+                                break;
+                            }
 
-                                default: {
-                                    isSet = false;
-                                    break;
-                                }
+                            default: {
+                                isSet = false;
+                                break;
                             }
                         }
                     }
@@ -167,7 +166,7 @@
             <div id='block_A'></div>
 
             <!-- RUS: Второй вариант блока с рекламой
-                 ENG: Second ad block option -->           
+                 ENG: Second ad block option -->
             <div id='block_B'></div>
 
             <!-- RUS: Текст для подбора контекстной рекламы
