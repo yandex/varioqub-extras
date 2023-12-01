@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>varioqub usage example</title>
+
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/style.css') }}">
+
+        <!-- RUS: Эти строчки можно найти на странице счетчика на https://metrika.yandex.ru.
+             Они запускают сессию для пользователя, отслеживают его действия. Должно присутствовать на всех страницах
+             ENG: These lines of code are copied from counter page at https://metrika.yandex.ru.
+             They are responsible for initializing counter session to track user's actions. It is recommended to insert on all pages -->
+
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+            ym(<YOUR_COUNTER_ID>, "init", {
+                clickmap:true,
+                trackLinks:true,
+                accurateTrackBounce:true
+            });
+        </script>
+        <!-- /Yandex.Metrika counter -->
+        <noscript><div>Enable javaScript support in your browser for this page to work</div></noscript>
+
+
+        <!-- RUS: Так как ответ от сервиса экспериментов приходит уже после того как страница загрузилась, то возникает мерцание.
+             Для борьбы с этим существует специальный элемент. Они должны присутствовать на всех страницах с экспериментом
+             ENG: The page will be loaded before the response from the server is received, which will change it, hence it will flicker.
+             To counteract this, you may insert these lines, that prevent page from initial rendering. It is recommended to insert them on all pages with experiments -->
+        <!-- Varioqub antiflicker -->
+        <style>.varioqub-antiflicker {opacity: 0 !important;}</style>
+        <script>
+            (function(a,n,t,i,f,li,c,k,e,r){
+                a[t]=a[t]||function(){(a[t].a=a[t].a||[]).push(arguments)};n.classList.add(i);c=function(){n.classList.remove(i)};li.callback=c;a[t].antiFlicker=li;setTimeout(c,f);
+            })(window, document.documentElement, 'ymab', 'varioqub-antiflicker', 500, { 'metrika.<YOUR_COUNTER_ID>': true });
+        </script>
+        <!-- /Varioqub antiflicker -->
+
+
+        <!-- RUS: Эти строчки нужно скопировать со страницы эксперимента, они отвечают за автоматическое изменение страницы для пользователя.
+             В данном случае они передают информацию о редиректе
+             ENG: These lines of code are copied from experiments page, they are responsible for initializing experiment and altering the experiment page.
+             In this case, sending data, that user was redirected -->
+
+        <!-- Varioqub experiments -->
+        <script type="text/javascript">
+            (function(e, x, pe, r, i, me, nt){
+                e[i]=e[i]||function(){(e[i].a=e[i].a||[]).push(arguments)},
+                me=x.createElement(pe),me.async=1,me.src=r,nt=x.getElementsByTagName(pe)[0],nt.parentNode.insertBefore(me,nt)
+            })
+            (window, document, 'script', 'https://abt.s3.yandex.net/expjs/latest/exp.js', 'ymab');
+
+            /// RUS: Настройка возможностей ymab для изменения страницы
+            /// ENG: Settings for automatic page modification via ymab
+            ymab('metrika.<YOUR_COUNTER_ID>', 'setConfig',{
+                // RUS: Обеспечивает возможность экспериментов с редиректом (по умолчанию true)
+                // ENG: Enables redirects from experiments settings (true by default)
+                enableRedir: true,
+
+                // RUS: Так как редирект может случится раньше, чем Метрика начнет отслеживать пользователя, то
+                // необходимо передавать техническое поле experiments на странице после редиректа.
+                // При редиректе на другой домен нужно использовать только 'get'
+                // ENG: Redirect may occur earlier than Metrika starts tracking user, therefore you should
+                // pass experiments value on the destination page.
+                // For redirects to other domains 'get' should be used
+                storeRedirParam: 'get',
+            });
+
+            ymab('metrika.<YOUR_COUNTER_ID>', 'init', function(answer) {
+                const { flags, prepareUrl } = answer;
+
+                // RUS: Имя флага задаётся при создании эксперимента
+                // ENG: The name of the flag specified when creating the experiment.
+                if (flags.redirect) {
+                    // RUS: Целевой сайт должен использовать тот же счётчик Метрики и такой же конфиг ymab,
+                    // чтобы эксперимент корректно работал
+                    // ENG: Target domain should use same Metrica counterId and use same ymab config settings to work correctly
+                    const href = prepareUrl(flags.redirect[0]); // Assuming what flag value is destination url
+                    // const href = prepareUrl('https://my-site-new-domain.com/'); // Or specify it manualy
+
+                    if (href) {
+                        window.location.replace(href);
+                    }
+                }
+            });
+        </script>
+        <!--  /Varioqub experiments -->
+
+    </head>
+
+    <body>
+        <header>
+            <h1 class="question">Am I a good boy?</h1>
+        </header>
+
+        <section>
+
+            <img class="img" src="{{ url_for('static', filename='src/red_corgi.png') }}"/>
+
+             <!-- RUS: Метрика будет считать взаимодействие с кнопкой (так как это перезагружает страницу) в зависимости от картинки (группы эксперимента)
+                  ENG: Metrika will track interactions with button (because it reloads page) depending on image (experiment group) -->
+            <div class="choice-container">
+                <button type="submit" class="choice good">Yes, of course!</button>
+            </div>
+        </section>
+    </body>
+</html>
