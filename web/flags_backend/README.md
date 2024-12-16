@@ -9,6 +9,8 @@
 Настройка эксперимента на `metrika.yandex.ru` должна указывать на каких страницах мы хотим получать флаги.
 Зададим для тестового варианта флаг `corgi_image = red_corgi`. Запустив сервер можно проверить, что все работает в окне "Проверка эксперимента".
 
+### В интерфейсе
+![Снимок экрана 2024-12-16 в 16 00 59](https://github.com/user-attachments/assets/a623d459-040f-43c4-afd4-04529124d936)
 
 
 # Flags
@@ -18,3 +20,6 @@ Take note, that it is possible to conduct several experiments on the same page, 
 Fetching flags from `uaas.yandex.ru` may be done on server- or client-side. For frontend flags handling it is recommended to use a `javaScript` library with shortcuts wrapped in a `ymab` function call, more on that you can find [https://yandex.ru/support/varioqub/objects/ymab.html](here).
 
 For our purposes, experiment settings on `metrika.yandex.ru` should include pages, where we want to receive flags. We set for option `A` flag: `corgi_image = red_corgi`. Now running `flask run` in the terminal, we can verify it is working in "Проверка эксперимента" window.
+
+### In interface
+![Снимок экрана 2024-12-16 в 16 03 08](https://github.com/user-attachments/assets/82e75f29-0dd1-4266-a160-83f97e094eed)
